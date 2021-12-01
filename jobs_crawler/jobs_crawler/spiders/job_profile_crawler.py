@@ -14,11 +14,11 @@ class JobProfileCrawlerSpider(CrawlSpider):
 
     job_detail_le = Rule(LinkExtractor(restrict_css='.tapItem'), follow=False, callback='parse_item')
 
-    # next_page_le = Rule(LinkExtractor(restrict_xpaths='#resultsCol > nav > div > ul > li:nth-child(6) > a::href'), follow=True)
+    next_page_le = Rule(LinkExtractor(restrict_xpaths='#resultsCol > nav > div > ul > li:nth-child(6) > a::href'), follow=True)
 
     rules = (
         job_detail_le,
-        # next_page_le
+        next_page_le
     )
 
     def parse_item(self, response):
