@@ -16,6 +16,8 @@ NEWSPIDER_MODULE = 'jobs_crawler.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'jobs_crawler (+http://www.yourdomain.com)'
 
+USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
@@ -54,6 +56,11 @@ ROBOTSTXT_OBEY = True
 #    'jobs_crawler.middlewares.JobsCrawlerDownloaderMiddleware': 543,
 #}
 
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+}
+
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -62,9 +69,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
