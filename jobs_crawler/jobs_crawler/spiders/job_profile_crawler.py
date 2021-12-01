@@ -14,7 +14,7 @@ class JobProfileCrawlerSpider(CrawlSpider):
 
     job_detail_le = Rule(LinkExtractor(restrict_css='.tapItem'), follow=False, callback='parse_item')
 
-    next_page_le = Rule(LinkExtractor(restrict_xpaths='#resultsCol > nav > div > ul > li:nth-child(6) > a::href'), follow=True)
+    next_page_le = Rule(LinkExtractor(restrict_css='#resultsCol > nav > div > ul > li:nth-child(6) > a::attr(href)'), follow=True)
 
     rules = (
         job_detail_le,
