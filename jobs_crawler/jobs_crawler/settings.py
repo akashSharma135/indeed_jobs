@@ -16,6 +16,8 @@ NEWSPIDER_MODULE = 'jobs_crawler.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'jobs_crawler (+http://www.yourdomain.com)'
 
+# USER_AGENT = 'https://developers.whatismybrowser.com/useragents/parse/79googlebot'
+
 # USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
 
 # Obey robots.txt rules
@@ -27,7 +29,7 @@ NEWSPIDER_MODULE = 'jobs_crawler.spiders'
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -61,6 +63,22 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
 }
 
+# DOWNLOADER_MIDDLEWARES = {
+#    'scrapy_proxy_pool.middlewares.ProxyPoolMiddleware': 610,
+#    'scrapy_proxy_pool.middlewares.BanDetectionMiddleware': 620,
+# }
+
+# PROXY_POOL_ENABLED = True
+
+# DOWNLOADER_MIDDLEWARES = {
+#     # ...
+#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+#     # ...
+# }
+
+# CONCURRENT_REQUESTS_PER_DOMAIN=2
+
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
@@ -69,17 +87,21 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
-}
+# ITEM_PIPELINES = {
+#    'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
+# }
+
+# ROTATING_PROXY_LIST_PATH = 'jobs_crawler/proxy_list.txt'
+
+# ROTATING_PROXY_PAGE_RETRY_TIMES = 2
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
+# AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+# AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 #AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0

@@ -1,39 +1,50 @@
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
-
+import scrapy
 import re
 
-
-class JobProfileCrawlerSpider(CrawlSpider):
+class JobProfileCrawlerSpider(scrapy.Spider):
     name = 'job_profile_crawler'
     allowed_domains = ['indeed.com']
-    profile = input("enter profile: ")
-    location = input("enter location: ")
 
-    start_urls = [f'https://in.indeed.com/jobs?q={profile}&l={location}']
+    profile = input("profile: ")
+    location = input("location: ")
 
-    job_detail_le = Rule(LinkExtractor(restrict_css='.tapItem'), follow=False, callback='parse_item')
+    start_urls = [f'https://www.indeed.com/jobs?q={profile}&l={location}']
 
-    next_page_le = Rule(LinkExtractor(restrict_css='#resultsCol > nav > div > ul > li:nth-child(6) > a::attr(href)'), follow=True)
+    def parse(self, response):
 
-    rules = (
-        job_detail_le,
-        next_page_le
-    )
+        # getting the url of detailed page
+        for href in response.css('.tapItem::attr(href)'):
+            url = response.urljoin(href.extract())
+            # making a request for detail page and calling method parse_items to get data
+            yield scrapy.Request(url, callback=self.parse_items)
+            
+        # getting url for next page
+        next_page_href = response.css('.pagination-list > li:last-child > a::attr(href)')
+        next_page_url = response.urljoin(next_page_href.get())
+        # making request for next page
+        yield scrapy.Request(next_page_url, callback=self.parse)
 
-    def parse_item(self, response):
+    def parse_items(self, response):
+        for selector in response.xpath('//*[@id="viewJobSSRRoot"]/div/div[1]/div[3]/div/div/div[1]/div[1]'):
 
-        data = response.css('#jobDescriptionText').get()
-        content = ""
-        if data is not None:
-            content = re.sub('<.*?>', '', data)
+            content = ""
+            description = str(selector.css('#jobDescriptionText').get())
+            if description is not None:
+                content = re.sub('<.*?>', '', description)
 
-        
-        yield {
-            'title': response.css('.jobsearch-JobInfoHeader-title::text').get(),
-            'company': response.css('.icl-u-lg-mr--sm::text').get(),
-            'address': response.css('.jobsearch-DesktopStickyContainer-companyrating+ div::text').get(),
-            'type': response.css('.jobsearch-DesktopStickyContainer-companyrating~ div+ div::text').get(),
-            'salary': response.css('.jobsearch-JobMetadataHeader-item .icl-u-xs-mr--xs::text').get(),
-            'description': content
-        }
+            url = response.url
+            container = selector.css('.jobsearch-DesktopStickyContainer')
+            profile = container.css('.jobsearch-JobInfoHeader-title-container h1::text').get()
+            company = container.css('.icl-u-lg-mr--sm::text').get()
+            if company is None:
+                company = container.css('.icl-u-xs-mr--xs a::text').get()
+            salary = container.css('.jobsearch-JobMetadataHeader-item > .icl-u-xs-mr--xs::text').get()
+            
+            yield {
+                "profile": profile if profile else "",
+                "company": company if company else "",
+                "salary": salary if salary else "",
+                "location": JobProfileCrawlerSpider.location,
+                "description": content if content else "",
+                "url": url
+            }
