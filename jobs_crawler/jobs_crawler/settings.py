@@ -24,15 +24,15 @@ NEWSPIDER_MODULE = 'jobs_crawler.spiders'
 # ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 # DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 16
-#CONCURRENT_REQUESTS_PER_IP = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 32
+# CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False
@@ -70,6 +70,8 @@ DOWNLOADER_MIDDLEWARES = {
 
 # PROXY_POOL_ENABLED = True
 
+RANDOMIZE_DOWNLOAD_DELAY = True
+
 DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
@@ -85,9 +87,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
+}
 
 ROTATING_PROXY_LIST_PATH = 'jobs_crawler/proxies.txt'
 

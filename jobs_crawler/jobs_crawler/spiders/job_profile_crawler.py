@@ -35,7 +35,6 @@ class JobProfileCrawlerSpider(scrapy.Spider):
 
 
     def parse(self, response):
-
         # getting the url of detailed page
         for href in response.css('.tapItem::attr(href)'):
             url = response.urljoin(href.extract())
@@ -43,8 +42,9 @@ class JobProfileCrawlerSpider(scrapy.Spider):
             yield scrapy.Request(url, callback=self.parse_items)
             
         # getting url for next page
-        next_page_href = response.css('.pagination-list > li:last-child > a::attr(href)')
+        next_page_href = response.xpath('//*[@id="resultsCol"]/nav/div/ul/li[6]/a/@href')
         next_page_url = response.urljoin(next_page_href.get())
+        
         # making request for next page
         yield scrapy.Request(next_page_url, callback=self.parse)
 
