@@ -1,5 +1,7 @@
 import scrapy
 import re
+from bs4 import BeautifulSoup
+import requests
 
 class JobProfileCrawlerSpider(scrapy.Spider):
     name = 'job_profile_crawler'
@@ -8,7 +10,29 @@ class JobProfileCrawlerSpider(scrapy.Spider):
     profile = input("profile: ")
     location = input("location: ")
 
-    start_urls = [f'https://www.indeed.com/jobs?q={profile}&l={location}']
+    start_urls = [f'https://in.indeed.com/jobs?q={profile}&l={location}']
+
+    # get proxy list
+    def __init__(self):
+        URL = 'https://free-proxy-list.net/'
+
+        res = requests.get(URL)
+
+        soup = BeautifulSoup(res.content, 'html.parser')
+
+        proxies_list = []
+        for trs in soup.find('div', 'table-responsive').find('tbody').find_all('tr'):
+            tds = trs.find_all('td')
+
+            ip = tds[0].text
+            port = tds[1].text
+
+            proxies_list.append(ip + ":" + port)
+
+        with open('jobs_crawler/proxies.txt', 'w') as file:
+            for data in proxies_list:
+                file.writelines(f"{data}\n")
+
 
     def parse(self, response):
 

@@ -29,9 +29,9 @@ NEWSPIDER_MODULE = 'jobs_crawler.spiders'
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+# DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -70,12 +70,10 @@ DOWNLOADER_MIDDLEWARES = {
 
 # PROXY_POOL_ENABLED = True
 
-# DOWNLOADER_MIDDLEWARES = {
-#     # ...
-#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
-#     # ...
-# }
+DOWNLOADER_MIDDLEWARES = {
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
 
 # CONCURRENT_REQUESTS_PER_DOMAIN=2
 
@@ -91,9 +89,9 @@ DOWNLOADER_MIDDLEWARES = {
 #    'jobs_crawler.pipelines.JobsCrawlerPipeline': 300,
 # }
 
-# ROTATING_PROXY_LIST_PATH = 'jobs_crawler/proxy_list.txt'
+ROTATING_PROXY_LIST_PATH = 'jobs_crawler/proxies.txt'
 
-# ROTATING_PROXY_PAGE_RETRY_TIMES = 2
+ROTATING_PROXY_PAGE_RETRY_TIMES = 2
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -104,7 +102,7 @@ DOWNLOADER_MIDDLEWARES = {
 # AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# AUTOTHROTTLE_TARGET_CONCURRENCY = 2
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 
